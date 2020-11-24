@@ -4,23 +4,44 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 public class Reservation {
-    private String id;
-    private Date checkIn, checkOut;
-    private int daysOfStay;
-    private Guest guest;
-    private boolean breakfast;
-    public double roomPrice;
+    private int numberOfDays;
+    private Date checkInDate, checkOutDate;
+    private int id;
+    private Guest mainGuest;
 
-    public Reservation(Room room, int startDate, int endDate, Guest guest){
-        //populate the member variables.
+
+    Reservation(int numberOfDays, Date checkInDate, Date checkOutDate, int id, Guest mainGuest){
+
     }
 
-
-    public int getDaysOfStay(Date checkIn, Date checkOut){
-        return (int)( (checkOut.getTime() - checkIn.getTime()) / (1000 * 60 * 60 * 24));
+    public int getNumberOfDays() {
+        return numberOfDays;
     }
 
-    public double calculateTotalPrice(){
-        return roomPrice * daysOfStay;
+    public Date getCheckInDate() {
+        return checkInDate;
+    }
+
+    public Date getCheckOutDate(){
+        return checkOutDate;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public Guest getMainGuest() {
+        return mainGuest;
+    }
+
+    @Override
+    public String toString() {
+        return "Reservation{" +
+                "numberOfDays=" + numberOfDays +
+                ", checkInDate=" + checkInDate +
+                ", checkOutDate=" + checkOutDate +
+                ", id=" + id +
+                ", mainGuest=" + mainGuest +
+                '}';
     }
 }
