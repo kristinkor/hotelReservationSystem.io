@@ -35,4 +35,11 @@ public class Room {
         return true;
     }
 
+    @Override
+    public String toString() {
+        return "Room: " +
+                "room number: " + number +
+                "\nType:" + type +
+                "\nReservations: " + reservations;
+    }
 }

@@ -23,4 +23,12 @@ public class ReservationRequest {
     public int getNumberOfGuests() {
         return numberOfGuests;
     }
+
+    @Override
+    public String toString() {
+        return "Your Reservation Request: " +
+                "\nThe date of check-in: " + checkInDate +
+                "\nThe date of check-out: " + checkOutDate +
+                ". Number Of Guests " + numberOfGuests;
+    }
 }

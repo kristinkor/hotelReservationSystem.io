@@ -4,14 +4,19 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 public class Reservation {
+    private int id;
     private int numberOfGuests;
     private Date checkInDate, checkOutDate;
-    private int id;
+
     private Guest mainGuest;
 
 
-    Reservation(int numberOfGuests, Date checkInDate, Date checkOutDate, int id, Guest mainGuest){
-
+    Reservation(int id, int numberOfGuests, Date checkInDate, Date checkOutDate, Guest mainGuest){
+            this.numberOfGuests = numberOfGuests;
+            this.checkInDate = checkInDate;
+            this.checkOutDate = checkOutDate;
+            this.id = id;
+            this.mainGuest = mainGuest;
     }
 
     public int getNumberOfGuests() {
@@ -27,7 +32,7 @@ public class Reservation {
     }
 
     public int getId() {
-        return id;
+        return id++;
     }
 
     public Guest getMainGuest() {
@@ -37,7 +42,7 @@ public class Reservation {
     @Override
     public String toString() {
         return "Reservation{" +
-                "numberOfDays=" + numberOfGuests +
+                "numberOfGuests=" + numberOfGuests +
                 ", checkInDate=" + checkInDate +
                 ", checkOutDate=" + checkOutDate +
                 ", id=" + id +

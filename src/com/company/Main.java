@@ -2,122 +2,178 @@ package com.company;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.InputMismatchException;
-import java.util.Scanner;
+import java.util.*;
 import java.util.concurrent.TimeUnit;
 
 public class Main {
     public static void main(String[] args) throws Exception {
-        ArrayList<RoomType> rt = new ArrayList<>();
+
+        // Creating a hotel object
+        Hotel h = new Hotel("California", " 424 East Palm Canyon Drive, CA 92264", 5);
+        System.out.println(h.toString());
+
+        //Creating RoomType object with facilities
+        ArrayList<String> facilities = new ArrayList<>();
+        facilities.add("Air conditioning");
+        ArrayList<RoomType> roomTypes = new ArrayList<>();
+        RoomType roomType = new RoomType(1111, "Superior King Room", 197, 2, facilities);
+        roomTypes.add(roomType);
+
+        // Creating reservation & Guest
+        Date checkIn = new Date(2020, Calendar.DECEMBER, 1);
+        Date checkOut = new Date(2020, Calendar.DECEMBER, 5);
+
+        // Creating a Guest object
+        Guest guest = new Guest("Kristina", "Kor", 1);
+        ArrayList <Guest> guests = new ArrayList<>();
+        guests.add(guest);
+
+        Reservation reservation = new Reservation(1, 2, checkIn, checkOut, guest);
+        ArrayList<Reservation> reservations= new ArrayList<Reservation>();
+        reservations.add(reservation);
+
+        Room room1 = new Room(1,roomType, reservations);
+        h.addRoom(room1);
+
+        System.out.println(h.toString());
+
+
         int numOfPeople;
         boolean cond = true;
 
-        Hotel h = new Hotel("California", " 424 East Palm Canyon Drive, CA 92264", 5);
-        System.out.println("Welcome to the hotel " + h.getName() + ". Such a lovely place!");
-        System.out.println("We are located " + h.getAdress() + ". ");
-        System.out.println("Current rating is " + h.getRating() + " stars!!!\n\n\n");
 
-        ArrayList<String> f1 = new ArrayList<String>();
+        ArrayList<String> f1 = new ArrayList<>();
         //("Air conditioning", "Attached bathroom", "Flat-screen TV",  "Free WiFi", "Free toiletries", "Safe Toilet Bathtub or shower", " Towels Linens", "Socket near the bed", "Refrigerator", "Satellite channels", "Tea/Coffee maker", "Iron Interconnecting room(s) available",  "Microwave Heating", "Hairdryer", "Kitchenette", "Fan Alarm clock", "Wardrobe or closet", "Dining table", "Toilet paper", "Single-room", "AC for guest accommodation");
         f1.add("Air conditioning");
         f1.add("Attached bathroom");
         f1.add("Flat-screen TV");
         RoomType rt1 = new RoomType(1111, "Superior King Room", 197, 2, f1);
-        rt.add(rt1);
+        roomTypes.add(rt1);
 
-        ArrayList<String> f2 = new ArrayList<String>();
-        f2.add("291 square feet");
-        f2.add("Attached bathroom");
-        f2.add("Pool view");
-        RoomType rt2 = new RoomType(1112, "Superior King Suite", 239, 2, f2);
-        rt.add(rt2);
 
-        RoomType rt3 = new RoomType(1112, "Superior King Suite", 239, 2, f2);
-        rt.add(rt3);
-
-        ArrayList<String> f3 = new ArrayList<String>();
-        f3.add("Attached bathroom");
-        f3.add("Pool view");
-        RoomType rt4 = new RoomType(1113, "Superior Queen Room", 181, 2, f3);
-        rt.add(rt4);
-        // Guest g = new Guest("Kristina", "Kor", 00001);
 
        // Room r1 = new Room(1,rt, res);
 
         do{
             System.out.println("We have following types of rooms in the Hotel: ");
 
-            for(int i = 0; i < rt.size() ; i++ ){
-                int j;
-                for(j = 0; j < rt.size(); j++){
-                    if(rt.get(i).getId() == rt.get(j).getId()){
+            // show room types
+            showRoomTypes(roomTypes);
+
+            // ask user to enter the id of the room he wants to book
+            int roomId = requestIdNumber(roomTypes);
+            RoomType roomTypeRequest = getRoomTypeById(roomTypes, roomId);
+            boolean flag = true;
+            do {
+                // ask user for a date of check-in
+                Date checkInDate = requestCheckInDate();
+                Date checkOutDate = requestCheckOutDate(checkInDate);
+                System.out.println("Enter the number of guests: ");
+                int numOfGuests = getNumOfGuests();
+                ReservationRequest resRequest = new ReservationRequest(checkInDate, checkOutDate, numOfGuests);
+
+                if(h.isReservationPossible(roomTypeRequest,resRequest)){
+                    System.out.println(resRequest.toString());
+                    System.out.println("The price for " + resRequest.toString() + " is" + h.calculatePrice(roomTypeRequest, resRequest));
+
+                    flag = false;
+                }
+                if(requestConfirmation()){
+
+                    Scanner scan = new Scanner(System.in);
+                    System.out.println("Please Enter Your name ");
+                    String name = scan.nextLine();
+                    System.out.println("Please Enter Your surname ");
+                    String surname = scan.nextLine();
+
+                    Guest guest1 = new Guest(name, surname, guests.size() + 1);
+                    Reservation reservation1 = new Reservation(reservations.size(), numOfGuests, checkInDate, checkOutDate, guest1);
+                }
+            }
+            while(true);
+            //int id =1;
+
+
+
+
+        }
+        while(cond);
+    }
+
+
+    private static boolean requestConfirmation() {
+        Scanner scan = new Scanner(System.in);
+        System.out.println("Would you like to make a reservation? Please press Y or N ");
+        String userInput = scan.nextLine();
+        if(userInput.compareToIgnoreCase("Y") == 0){
+            return true;
+        }
+        return false;
+    }
+
+    private static RoomType getRoomTypeById(ArrayList<RoomType> rt, int id) {
+        int i;
+        for(i = 0; i < rt.size(); i++ ){
+            if(rt.get(i).getId() == rt.get(id).getId()){
+                break;
+            }
+
+        }
+        return rt.get(i);
+    }
+
+    private static void showRoomTypes(ArrayList<RoomType> rt) {
+        for(int i = 0; i < rt.size(); i++ ){
+            int j;
+            for(j = 0; j < rt.size(); j++){
+                if(rt.get(i).getId() == rt.get(j).getId()){
+                    break;
+                }
+            }
+            if (i == j){
+                System.out.print(rt.get(i));
+            }
+        }
+    }
+
+    private static int requestIdNumber(ArrayList<RoomType> rt) {
+        Scanner scan = new Scanner(System.in);
+        boolean flag = true;
+        int roomId = 0;
+
+        do{
+            try {
+                System.out.println("Chose the room type by entering id#: ");
+                roomId = scan.nextInt();
+                for(int i= 0; i < rt.size(); i++){
+                    if (roomId == rt.get(i).getId()) {
+                        flag = false;
                         break;
                     }
                 }
-                if (i == j){
-                    System.out.print(rt.get(i));
-                }
-            }
-            boolean flag = true;
-            do{
-                int id = requestIdNumber();
-                for(int i= 0; i < rt.size(); i++){
-
-                    if(id == rt.get(i).getId()){
-
-                        flag = false;
-                    }
-                }
+            } catch (InputMismatchException e){
                 System.out.println("Please, enter the correct room Type Id");
-
+                scan.next();
             }
-            while(flag);
-
-
-
-            // show room types
-
-
-
-            Date checkInDate = requestCheckInDate();
-            Date checkOutDate = requestCheckOutDate();
-            System.out.println("Enter the number of guests: ");
-            int numOfGuests = getNumOfGuests();
-            ReservationRequest resreq = new ReservationRequest(checkInDate, checkOutDate, numOfGuests);
-
-           cond = false;
         }
-        while(cond);
-
-        //Reservation res = new Reservation(3, requestCheckInDate(), requestCheckOutDate(), 123, g);
-
-
-        //ReservationRequest reservationRequest = new ReservationRequest(check_in, check_out, numOfPeople);
-
-    }
-
-    private static int requestIdNumber() {
-        Scanner scan = new Scanner(System.in);
-        System.out.println("Chose the room type by entering id#: ");
-        return scan.nextInt();
-
+        while(flag);
+        return roomId;
     }
 
 
     public static Date requestCheckInDate() {
-        Date check_in = new Date();
+        Date checkInDate = new Date();
+
         boolean continueInput = true;
         do {
             try {
-                SimpleDateFormat sdf = new SimpleDateFormat("dd.MM.yyyy");
+                SimpleDateFormat sdf = new SimpleDateFormat("MM.dd.yyyy");
                 Scanner scan = new Scanner(System.in);
-                System.out.println("Please enter the check-in date in format dd.MM.yyyy");
-                check_in = sdf.parse(scan.nextLine());
+                System.out.println("Please enter the check-in date in format MM.dd.yyyy");
+                checkInDate = sdf.parse(scan.nextLine());
 
-                if (isValidCheckIn(check_in)){
-                    System.out.println("\nThe Check-in date is: " + check_in);
+                if (isValidCheckIn(checkInDate)){
+                    System.out.println("\nThe Check-in date is: " + checkInDate);
                     continueInput = false;
                 }
 
@@ -127,29 +183,78 @@ public class Main {
             }
         }
         while(continueInput);
-        return check_in;
+        return checkInDate;
     }
 
-    public static Date requestCheckOutDate() throws Exception{
-        Date check_out = new Date();
-        SimpleDateFormat sdf = new SimpleDateFormat("dd.MM.yyyy");
-        Scanner scan = new Scanner(System.in);
-        System.out.println("Please enter the check-out date in format dd.MM.yyyy");
-        Date date = sdf.parse(scan.nextLine());
-        return check_out;
+    public static Date addDays(Date d, int days)
+    {
+        Calendar calendar = new GregorianCalendar(/* remember about timezone! */);
+        calendar.setTime(d);
+        calendar.add(Calendar.DATE, 30);
+        d = calendar.getTime();
+        return d;
     }
+
+    public static Date requestCheckOutDate(Date checkInDate) throws Exception{
+        Date checkOutDate = new Date();
+
+        boolean continueInput = true;
+        do {
+            try {
+                SimpleDateFormat sdf = new SimpleDateFormat("MM.dd.yyyy");
+                Scanner scan = new Scanner(System.in);
+                System.out.println("Please enter the check-out date in format MM.dd.yyyy");
+                checkOutDate = sdf.parse(scan.nextLine());
+
+                if (isValidCheckOut(checkInDate, checkOutDate)){
+                    System.out.println("\nThe Check-out date is: " + checkOutDate);
+                    continueInput = false;
+                }
+
+            }
+            catch(ParseException ex) {
+                System.out.println("This check-in date is unavailable. Please, try again ");
+            }
+        }
+        while(continueInput);
+        return checkOutDate;
+    }
+
     // Instantiate a Date object
-    public static boolean isValidCheckIn(Date d){
+    public static boolean isValidCheckIn(Date start){
         Date todayDate = new Date();
+        Date endOfBookingPeriodDate = addDays(todayDate, 30);
+
         SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd");
 
-        return sdf.format(d).compareTo(sdf.format(todayDate)) >= 0;
+        return sdf.format(start).compareTo(sdf.format(todayDate)) >= 0 && sdf.format(start).compareTo(sdf.format(endOfBookingPeriodDate)) <= 0;
+    }
+
+    public static boolean isValidCheckOut(Date start, Date end){
+        Date todayDate = new Date();
+        Date endOfBookingPeriodDate = addDays(todayDate, 30);
+
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd");
+
+        return sdf.format(end).compareTo(sdf.format(start)) >= 0 && sdf.format(end).compareTo(sdf.format(endOfBookingPeriodDate)) <= 0;
     }
 
     public static int getNumOfGuests(){
-        Scanner scan = new Scanner(System.in);
-        System.out.println("Please enter the number of guests");
-        return scan.nextInt();
+        boolean flag = true;
+        do {
+            try {
+                Scanner scan = new Scanner(System.in);
+                System.out.println("Please enter the number of guests");
+                return scan.nextInt();
+
+            }
+            catch (Exception e) {
+                 System.out.println("Wrong input! ");
+
+            }
+        }
+        while (flag);
+        return 0;
     }
 
 /*    public boolean isValidRange(Date d1, Date d2){

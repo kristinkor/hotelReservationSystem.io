@@ -26,9 +26,21 @@ public class Hotel {
         return rating;
     }
 
+    public ArrayList<Room> getRooms() {
+        return rooms;
+    }
+
+    public ArrayList<RoomType> getRoomTypes(){
+
+        ArrayList<RoomType> roomType = null;
+        for (int i = 0; i < rooms.size(); i++) {
+            roomType.add(rooms.get(i).getType());
+        }
+        return roomType;
+    }
+
     public void addRoom(Room room){
         rooms.add(room);
-
     }
 
     public int getDaysOfStay(Date checkIn, Date checkOut){
@@ -39,13 +51,25 @@ public class Hotel {
         return roomType.getDailyRate() * getDaysOfStay(reservationRequest.getCheckInDate(), reservationRequest.getCheckOutDate());
     }
 
+    public boolean isReservationPossible(RoomType roomType, ReservationRequest resRequest) {
+        final Date early = resRequest.getCheckInDate();
+        final Date late = resRequest.getCheckOutDate();
+        /*for(int i = 0; i < reservation.size(),) {
+            //if(!(early.isAfter(reservation.getCheckInDate()) || late.isBefore(reservation.getCheckInDate()))
+            return true;
+        }*/
+        return false;
+    }
+
+    public void addReservation(RoomType roomType, Reservation reservation){
+
+    }
+
     @Override
     public String toString() {
-        return "Hotel{" +
-                "name='" + name + '\'' +
-                ", address='" + address + '\'' +
-                ", rating=" + rating +
-                ", rooms=" + rooms +
-                '}';
+        return "Welcome to the hotel " + name + ". Such a lovely place!" +
+                "\nWe are located " + address +
+                "\nCurrent rating is " + rating +
+                "\nRooms: " + rooms;
     }
 }
