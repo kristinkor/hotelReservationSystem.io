@@ -1,7 +1,7 @@
 package com.company;
 
-import java.text.SimpleDateFormat;
 import java.util.Date;
+
 
 public class Reservation {
     private int id;
@@ -11,12 +11,12 @@ public class Reservation {
     private Guest mainGuest;
 
 
-    Reservation(int id, int numberOfGuests, Date checkInDate, Date checkOutDate, Guest mainGuest){
-            this.numberOfGuests = numberOfGuests;
-            this.checkInDate = checkInDate;
-            this.checkOutDate = checkOutDate;
-            this.id = id;
-            this.mainGuest = mainGuest;
+    Reservation(int id, int numberOfGuests, Date checkInDate, Date checkOutDate, Guest mainGuest) {
+        this.numberOfGuests = numberOfGuests;
+        this.checkInDate = checkInDate;
+        this.checkOutDate = checkOutDate;
+        this.id = id;
+        this.mainGuest = mainGuest;
     }
 
     public int getNumberOfGuests() {
@@ -27,7 +27,7 @@ public class Reservation {
         return checkInDate;
     }
 
-    public Date getCheckOutDate(){
+    public Date getCheckOutDate() {
         return checkOutDate;
     }
 

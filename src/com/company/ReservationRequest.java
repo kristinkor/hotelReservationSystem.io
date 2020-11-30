@@ -2,11 +2,12 @@ package com.company;
 
 import java.util.Date;
 
+
 public class ReservationRequest {
     private Date checkInDate, checkOutDate;
     private int numberOfGuests;
 
-    ReservationRequest (Date checkInDate, Date checkOutDate, int numberOfGuests){
+    ReservationRequest(Date checkInDate, Date checkOutDate, int numberOfGuests) {
         this.checkInDate = checkInDate;
         this.checkOutDate = checkOutDate;
         this.numberOfGuests = numberOfGuests;
@@ -29,6 +30,6 @@ public class ReservationRequest {
         return "Your Reservation Request: " +
                 "\nThe date of check-in: " + checkInDate +
                 "\nThe date of check-out: " + checkOutDate +
-                ". Number Of Guests " + numberOfGuests;
+                "\nNumber Of Guests " + numberOfGuests;
     }
 }

@@ -2,14 +2,15 @@ package com.company;
 
 import java.util.ArrayList;
 
+
 public class RoomType {
     private int id;
     private String name;
     private double dailyRate;
     private int capacity;
-    private ArrayList <String> facilities;
+    private ArrayList<String> facilities;
 
-    RoomType(int id, String name, double dailyRate , int capacity, ArrayList<String> facilities){
+    RoomType(int id, String name, double dailyRate, int capacity, ArrayList<String> facilities) {
         this.id = id;
         this.name = name;
         this.dailyRate = dailyRate;
@@ -21,7 +22,7 @@ public class RoomType {
         return id;
     }
 
-    public String getName(){
+    public String getName() {
         return name;
     }
 
@@ -33,15 +34,15 @@ public class RoomType {
         return capacity;
     }
 
-    public ArrayList <String> getFacilities(){
+    public ArrayList<String> getFacilities() {
         return facilities;
     }
 
     @Override
     public String toString() {
-        return "RoomType id#" + id +" is a "+ name +
+        return "RoomType id#" + id + " is a " + name +
                 " for only " + dailyRate +
                 "$ per day. The capacity is " + capacity +
-                " people. The room has " + facilities +"\n";
+                " people. The room has " + facilities + "\n";
     }
 }

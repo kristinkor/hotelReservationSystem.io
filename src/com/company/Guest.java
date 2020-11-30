@@ -1,20 +1,19 @@
 package com.company;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.Scanner;
-import java.util.concurrent.TimeUnit;
 
 public class Guest {
-    private String name;
-    private String surname;
-    private int id;
+    private final String id;
+    private final String name;
+    private final String surname;
 
-    Guest(String name, String surname, int id){
+
+    Guest(String id, String name, String surname) {
+        this.id = id;
         this.name = name;
         this.surname = surname;
-        this.id = id;
+    }
+    public String getId() {
+        return id;
     }
 
     public String getName() {
@@ -23,10 +22,6 @@ public class Guest {
 
     public String getSurname() {
         return surname;
-    }
-
-    public int getId() {
-        return id;
     }
 
     @Override
