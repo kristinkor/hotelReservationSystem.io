@@ -4,8 +4,9 @@ import java.util.Date;
 
 
 public class ReservationRequest {
-    private Date checkInDate, checkOutDate;
-    private int numberOfGuests;
+    private final Date checkInDate;
+    private final Date checkOutDate;
+    private final int numberOfGuests;
 
     ReservationRequest(Date checkInDate, Date checkOutDate, int numberOfGuests) {
         this.checkInDate = checkInDate;

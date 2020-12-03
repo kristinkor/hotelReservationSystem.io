@@ -6,7 +6,6 @@ public class Guest {
     private final String name;
     private final String surname;
 
-
     Guest(String id, String name, String surname) {
         this.id = id;
         this.name = name;
@@ -26,8 +25,9 @@ public class Guest {
 
     @Override
     public String toString() {
-        return "Guest{" +
-                "surname='" + surname + '\'' +
-                '}';
+        return "Guest " +
+                "id " + id + '\'' +
+                ", name " + name + '\'' +
+                ", surname " + surname + '\'';
     }
 }

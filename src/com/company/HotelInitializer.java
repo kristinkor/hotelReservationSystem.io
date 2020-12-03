@@ -7,9 +7,7 @@ import java.util.ArrayList;
 public class HotelInitializer {
     // Initialize hotel
     Hotel h = new Hotel("California", " 424 East Palm Canyon Drive, CA 92264", 5);
-
-    // Initialise the list of Room types
-
+    ArrayList<Reservation> r = new ArrayList<>();
 
     public ArrayList<RoomType> roomTypeInit() {
         ArrayList <RoomType> roomTypes = new ArrayList();
@@ -56,19 +54,21 @@ public class HotelInitializer {
         Guest g = new Guest("5", "a", "b");
 
 
-        Reservation reservation = new Reservation(1, 2,checkIn , checkOut,  g);
-        ArrayList<Reservation> r = new ArrayList<>();
+        Reservation reservation = new Reservation("1", 2,checkIn , checkOut,  g);
+        ArrayList <Reservation> defaultReservation = new ArrayList<>();
+
         r.add(reservation);
 
-        h.addRoom(new Room(111, roomTypes.get(0), null));
-        h.addRoom(new Room(112, roomTypes.get(0), null));
-        h.addRoom(new Room(113, roomTypes.get(4), null));
-        h.addRoom(new Room(114, roomTypes.get(4), null));
-        h.addRoom(new Room(115, roomTypes.get(4), null));
-        h.addRoom(new Room(116, roomTypes.get(0), null));
+        h.addRoom(new Room(111, roomTypes.get(0), defaultReservation));
+        h.addRoom(new Room(112, roomTypes.get(0), defaultReservation));
+        h.addRoom(new Room(113, roomTypes.get(4), defaultReservation));
+        h.addRoom(new Room(114, roomTypes.get(4), defaultReservation));
+        h.addRoom(new Room(115, roomTypes.get(4), defaultReservation));
+        h.addRoom(new Room(119, roomTypes.get(2), defaultReservation));
+        h.addRoom(new Room(120, roomTypes.get(3), defaultReservation));
+        h.addRoom(new Room(116, roomTypes.get(0), defaultReservation));
         h.addRoom(new Room(118, roomTypes.get(1), r));
-        h.addRoom(new Room(119, roomTypes.get(2), null));
-        h.addRoom(new Room(120, roomTypes.get(3), null));
+
 
     }
 }

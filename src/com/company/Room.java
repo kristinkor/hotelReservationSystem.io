@@ -1,11 +1,9 @@
 package com.company;
 
 import java.util.ArrayList;
-import java.util.Date;
 
 
 public class Room {
-
     public int number;
     RoomType type;
     ArrayList<Reservation> reservations;
@@ -29,13 +27,8 @@ public class Room {
         return reservations;
     }
 
-    public void addReservation(RoomType type, Reservation reservations) {
-
-    }
-
-
-    boolean isAvailable(Date checkIn, int numberOfDays) {
-        return true;
+    public void addReservation(RoomType type, Reservation reservation) {
+        this.reservations.add(reservation);
     }
 
     @Override
