@@ -49,13 +49,14 @@ public class HotelInitializer {
     }
 
     public void roomInit(ArrayList<RoomType> roomTypes) {
-        Date checkIn = new java.util.Date("Wed Dec 12 00:00:00 EST 2020");
-        Date checkOut = new java.util.Date("Wed Dec 20 00:00:00 EST 2020");
+        Date checkIn = new java.util.Date("Wed Dec 20 00:00:00 EST 2020");
+        Date checkOut = new java.util.Date("Wed Dec 25 00:00:00 EST 2020");
         Guest g = new Guest("5", "a", "b");
 
 
         Reservation reservation = new Reservation("1", 2,checkIn , checkOut,  g);
         ArrayList <Reservation> defaultReservation = new ArrayList<>();
+        defaultReservation.add(reservation);
 
         r.add(reservation);
 

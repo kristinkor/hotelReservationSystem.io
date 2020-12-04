@@ -31,6 +31,6 @@ public class ReservationRequest {
         return "Your Reservation Request: " +
                 "\nThe date of check-in: " + checkInDate +
                 "\nThe date of check-out: " + checkOutDate +
-                "\nNumber Of Guests " + numberOfGuests;
+                "\nNumber Of Guests: " + numberOfGuests;
     }
 }

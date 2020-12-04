@@ -13,7 +13,7 @@ public class Main {
         ArrayList<RoomType> roomTypes = init.roomTypeInit();
         init.roomInit(roomTypes);
 
-        boolean cond = true;
+        boolean condintion = true;
         do {
             // welcome message
             System.out.println(init.h.toString() + "\nWe have following types of rooms in the Hotel: \n" + init.h.getRoomTypes());
@@ -30,31 +30,54 @@ public class Main {
             if (isPossible) {
                 System.out.println(reservationRequest.toString());
                 System.out.println("The price for your reservation request is " + init.h.calculatePrice(roomTypeRequest, reservationRequest) +"$.");
+                System.out.println("Would you like to make a reservation? Please press Y or N ");
                 if (requestConfirmation()) {
-                    Scanner scan = new Scanner(System.in);
-                    System.out.println("Please Enter Your name ");
-                    String name = scan.nextLine();
-                    System.out.println("Please Enter Your surname ");
-                    String surname = scan.nextLine();
-                    String userId = UUID.randomUUID().toString();
-                    Reservation reservation = new Reservation(generateId(), numOfGuests, checkInDate, checkOutDate, new Guest(userId, name, surname));
+                    Reservation reservation = new Reservation(generateId(), numOfGuests, checkInDate, checkOutDate, requestGuestInformation());
                     init.h.addReservation(roomTypeRequest, reservation);
                     System.out.println("Congratulations! Your booking is made. ");
-                    System.out.println(reservation.toString());
+                    System.out.println("Your reservation: \n" + reservation.toString());
+                    System.out.println("Would you like to make another reservation? Please press Y or N ");
                     if(!requestConfirmation()) {
-                        cond = false;
+                        condintion = false;
                     }
+                }
+                else {
+                    System.out.println("Would you like to make another reservation? Please press Y or N ");
+                    if(!requestConfirmation()){
+                        condintion = false;
+                    }
+
                 }
             }
             else {
                 System.out.println("this room type is not available. ");
+                System.out.println("Would you like to make another reservation? Please press Y or N ");
                 if(!requestConfirmation()) {
-                    cond = false;
+                    condintion = false;
                 }
             }
 
         }
-        while (cond);
+        while (condintion);
+    }
+
+    private static Guest requestGuestInformation() {
+        do {
+            try {
+                Scanner scan = new Scanner(System.in);
+                System.out.println("Please Enter Your name ");
+                String name = scan.nextLine();
+                System.out.println("Please Enter Your surname ");
+                String surname = scan.nextLine();
+                String userId = generateId();
+                return new Guest(userId, name,surname);
+            }
+            catch (InputMismatchException e){
+                System.out.println("Invalid input. Please try again.");
+            }
+
+        }
+        while (true);
     }
 
     private static String generateId() {
@@ -103,11 +126,11 @@ public class Main {
                 checkInDate = sdf.parse(scan.nextLine());
 
                 if (isValidCheckIn(checkInDate)) {
-                    System.out.println("\nThe Check-in date is: " + checkInDate);
+                    System.out.println("The Check-in date is: " + checkInDate);
                     flag = false;
                 }
 
-            } catch (ParseException ex) {
+            } catch (Exception ex) {
                 System.out.println("This check-in date is unavailable. Please, try again ");
             }
         }
@@ -140,11 +163,11 @@ public class Main {
                 checkOutDate = sdf.parse(scan.nextLine());
 
                 if (isValidCheckOut(checkInDate, checkOutDate)) {
-                    System.out.println("\nThe Check-out date is: " + checkOutDate);
+                    System.out.println("The Check-out date is: " + checkOutDate);
                     continueInput = false;
                 }
 
-            } catch (ParseException ex) {
+            } catch (Exception ex) {
                 System.out.println("This check-in date is unavailable. Please, try again ");
             }
         }
@@ -153,12 +176,11 @@ public class Main {
     }
 
     public static boolean isValidCheckOut(Date startDate, Date endDate) {
-        Date todayDate = new Date();
-        Date endOfBookingPeriodDate = addDays(todayDate, 30);
+        Date endOfBookingPeriodDate = addDays(startDate, 30);
 
         SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd");
 
-        return sdf.format(endDate).compareTo(sdf.format(startDate)) >= 0 && sdf.format(endDate).compareTo(sdf.format(endOfBookingPeriodDate)) <= 0;
+        return sdf.format(endDate).compareTo(sdf.format(startDate)) > 0 && sdf.format(endDate).compareTo(sdf.format(endOfBookingPeriodDate)) < 0;
     }
 
     /** The method requestCheckOutDate asks user to enter check-in date and validates the input
@@ -209,7 +231,6 @@ public class Main {
 
     private static boolean requestConfirmation() {
         Scanner scan = new Scanner(System.in);
-        System.out.println("Would you like to make a reservation? Please press Y or N ");
         String userInput = scan.nextLine();
         return userInput.compareToIgnoreCase("Y") == 0;
     }
