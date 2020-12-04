@@ -18,7 +18,7 @@ public class Main {
             // welcome message
             System.out.println(init.h.toString() + "\nWe have following types of rooms in the Hotel: \n" + init.h.getRoomTypes());
             int roomTypeId = requestRoomTypeId(roomTypes);
-            RoomType roomTypeRequest = (getRoomTypeById(roomTypes, roomTypeId));
+            RoomType roomTypeRequest = getRoomTypeById(roomTypes, roomTypeId);
             int numOfGuests = getNumOfGuests(roomTypeRequest);
 
             Date checkInDate = requestCheckInDate();
@@ -29,11 +29,12 @@ public class Main {
 
             if (isPossible) {
                 System.out.println(reservationRequest.toString());
-                System.out.println("The price for your reservation request is " + init.h.calculatePrice(roomTypeRequest, reservationRequest) +"$.");
+                System.out.println("You can book this room! The price for your reservation request is " + init.h.calculatePrice(roomTypeRequest, reservationRequest) +"$.");
                 System.out.println("Would you like to make a reservation? Please press Y or N ");
                 if (requestConfirmation()) {
                     Reservation reservation = new Reservation(generateId(), numOfGuests, checkInDate, checkOutDate, requestGuestInformation());
                     init.h.addReservation(roomTypeRequest, reservation);
+
                     System.out.println("Congratulations! Your booking is made. ");
                     System.out.println("Your reservation: \n" + reservation.toString());
                     System.out.println("Would you like to make another reservation? Please press Y or N ");

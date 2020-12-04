@@ -65,10 +65,7 @@ public class Hotel {
         final Date requestCheckIn = reservationRequest.getCheckInDate();
         final Date requestCheckOut = reservationRequest.getCheckOutDate();
         Room room = (foundAvailableRoom(roomType, requestCheckIn, requestCheckOut));
-        if (!(room == null)) {
-            return true;
-        }
-        return false;
+        return !(room == null);
     }
 
     public int getDaysOfStay(Date checkIn, Date checkOut) {
@@ -96,21 +93,6 @@ public class Hotel {
         if (!(room == null)) {
             room.addReservation(roomType, reservation);
         }
-        /*for (Room room : rooms) {
-            if (room.getType().equals(roomType)) {
-                for (int j = 0; j < room.getReservations().size(); j++) {
-                    Date roomCheckIn = room.reservations.get(j).getCheckInDate();
-                    System.out.println(roomCheckIn);
-
-                    Date roomCheckOut = room.reservations.get(j).getCheckOutDate();
-                    System.out.println(roomCheckOut);
-                    if (( requestCheckOut.before(roomCheckIn)) || requestCheckIn.after(roomCheckOut)) {
-                        room.addReservation(roomType, reservation);
-                        break;
-                    }
-                }
-            }
-        }*/
     }
 
     @Override
