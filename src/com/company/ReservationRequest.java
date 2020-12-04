@@ -28,7 +28,7 @@ public class ReservationRequest {
 
     @Override
     public String toString() {
-        return "Your Reservation Request: " +
+        return "\nYour Reservation Request: " +
                 "\nThe date of check-in: " + checkInDate +
                 "\nThe date of check-out: " + checkOutDate +
                 "\nNumber Of Guests: " + numberOfGuests;
