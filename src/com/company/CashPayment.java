@@ -14,7 +14,19 @@ public class CashPayment extends Payment{
 		this.accountNumber = accountNumber;
 		this.checkNumber = checkNumber;
 	}
-	
+
+	public String getRoutingNumber() {
+		return routingNumber;
+	}
+
+	public String getAccountNumber() {
+		return accountNumber;
+	}
+
+	public String getCheckNumber() {
+		return checkNumber;
+	}
+
 	public void displayInfo()
 	{
 		System.out.println("Billing Name: " + billingNameFirst + " " + billingNameLast );

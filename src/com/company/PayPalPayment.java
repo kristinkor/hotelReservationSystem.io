@@ -16,11 +16,11 @@ public class PayPalPayment extends Payment{
 		return userEmail;
 	}
 	
-	public void setUserEmail(String newUserEmail)
+	public void setUserEmail(String userEmail)
 	{
-		userEmail = newUserEmail;
+		this.userEmail = userEmail;
 	}
-	
+
 	public void displayInfo()
 	{
 		System.out.println("Billing Name: " + billingNameFirst + " " + billingNameLast );

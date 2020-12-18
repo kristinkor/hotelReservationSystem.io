@@ -1,75 +1,188 @@
 package com.company;
 
-import java.util.*;
+import java.sql.*;
+import java.text.Format;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+
+
+import java.sql.Connection;
 
 
 public class HotelInitializer {
     // Initialize hotel
     Hotel h = new Hotel("California", " 424 East Palm Canyon Drive, CA 92264", 5);
-    ArrayList<Reservation> r = new ArrayList<>();
+
+    public static void main(String[] args) throws SQLException {
+    }
+
+    ArrayList<RoomType> roomTypes = new ArrayList<>();
+
 
     public ArrayList<RoomType> roomTypeInit() {
-        ArrayList <RoomType> roomTypes = new ArrayList();
+        try {
 
-        // Initialise the list of facilities for Superior King Room room type
-        ArrayList<String> facilitiesKingRoom = new ArrayList<>();
-        facilitiesKingRoom.add("Air conditioning");
-        facilitiesKingRoom.add("Attached bathroom");
-        facilitiesKingRoom.add("Flat-screen TV");
-
-        // Initialise the list of facilities for Superior King Room room type
-        ArrayList<String> facilitiesKingSuite = new ArrayList<>();
-        facilitiesKingSuite.add("291 square feet");
-        facilitiesKingSuite.add("Attached bathroom");
-        facilitiesKingSuite.add("Pool view");
-
-        // Initialise the list of facilities for Superior Queen Room room type
-        ArrayList<String> facilitiesQueenRoom = new ArrayList<>();
-        facilitiesQueenRoom.add("Attached bathroom");
-        facilitiesQueenRoom.add("Pool view");
+            Connection myConnection = DriverManager.getConnection("jdbc:mysql://localhost:3306/hotel", "root", "password");
+            Statement myStatement = myConnection.createStatement();
+            ResultSet myResultStatement = myStatement.executeQuery("select * from hotel.`roomType`");
 
 
-        // Initialise the list of facilities for Queen Room with Two Queen Beds room type
-        ArrayList<String> facilitiesQueenDouble = new ArrayList<>();
-        facilitiesQueenDouble.add("2 queen beds");
-
-        //Initialise the list of facilities for Studio with Pool View
-        ArrayList<String> facilitiesStudio = new ArrayList<>();
-        facilitiesQueenRoom.add("Attached bathroom");
-        facilitiesStudio.add("Pool view");
-
-        roomTypes.add(new RoomType(1111, "Superior King Room", 197, 2, facilitiesKingRoom));
-        roomTypes.add(new RoomType(1112, "Superior King Suite", 239, 2, facilitiesKingSuite));
-        roomTypes.add(new RoomType(1113, "Superior Queen Room", 174, 2, facilitiesQueenRoom));
-        roomTypes.add(new RoomType(1114, "Queen Room with Two Queen Beds", 181, 4, facilitiesQueenDouble));
-        roomTypes.add(new RoomType(1115, "Studio with Pool View", 164, 2, facilitiesStudio));
-
+            while (myResultStatement.next()) {
+                ArrayList<String> facilitiesKingRoom = new ArrayList<>();
+                facilitiesKingRoom.add("hop");
+                roomTypes.add(new RoomType(myResultStatement.getInt("id"), myResultStatement.getString("name"),
+                        myResultStatement.getDouble("dailyRate"), myResultStatement.getInt("capacity"), facilitiesKingRoom));
+            }
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+        //System.out.println(roomTypes.size());
         return roomTypes;
     }
 
-    public void roomInit(ArrayList<RoomType> roomTypes) {
-        Date checkIn = new java.util.Date("Wed Dec 20 00:00:00 EST 2020");
-        Date checkOut = new java.util.Date("Wed Dec 25 00:00:00 EST 2020");
-        Guest g = new Guest("5", "a", "b");
+    public int saveReservations(Reservation reservation, Guest guest) throws SQLException {
+        Connection myConnection = DriverManager.getConnection("jdbc:mysql://localhost:3306/hotel", "root", "password");
+
+        try {
+
+            PreparedStatement pr = myConnection.prepareStatement("insert into "
+                    + "reservation(id, numberOfGuests, checkInDate, checkOutDate, name, surname) values(?,?,?,?,?,?)");
+            pr.setString(1, reservation.getId());
+
+            pr.setInt(2, reservation.getNumberOfGuests());
+            Format formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+            String checkIn = formatter.format(reservation.getCheckInDate());
+            System.out.println(checkIn);
+            String checkOut = formatter.format(reservation.getCheckOutDate());
+            pr.setString(3, checkIn);
+            pr.setString(4, checkOut);
+            pr.setString(5, guest.getName());
+            pr.setString(6, guest.getSurname());
+            pr.executeUpdate();
+        } catch (SQLException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+            try {
+                myConnection.close();
+            } catch (SQLException e1) {
+                // TODO Auto-generated catch block
+                e1.printStackTrace();
+            }
+            return 0;
+
+        }
+        try {
+            myConnection.close();
+        } catch (SQLException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+        return 1;
+        //чтобы контролировать выполнение запроса можно выводить переменную в зависимости от успешность или неудачи выполнения запроса.
+        //можно также выводить айди объекта, который был добавлен в базу.
+    }
+
+    public void roomInit(ArrayList<RoomType> rt) {
+        ArrayList<Room> rooms = new ArrayList<>();
+        try {
+
+            Connection myConnection = DriverManager.getConnection("jdbc:mysql://localhost:3306/hotel", "root", "password");
+            Statement myStatement = myConnection.createStatement();
+            ResultSet myResultStatement = myStatement.executeQuery("select * from hotel.`room`");
+
+/*            Date checkIn = new java.util.Date("Wed Dec 20 00:00:00 EST 2020");
+            Date checkOut = new java.util.Date("Wed Dec 25 00:00:00 EST 2020");
+            Guest g = new Guest("5", "a", "b");
+
+            Reservation reservation = new Reservation("1", 2, checkIn, checkOut, g);
+            ArrayList<Reservation> defaultReservation = new ArrayList<>();
+            defaultReservation.add(reservation);*/
+
+            while (myResultStatement.next()) {
+                ArrayList<Reservation> defaultReservation = new ArrayList<>();
+                //defaultReservation.add(getReservation());
+                int id = myResultStatement.getInt("roomTypeId");
+                h.addRoom(new Room(myResultStatement.getInt("number"), getRoomTypesById(id), defaultReservation));
+            }
+            //System.out.println(h.getRoom().size());
+
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+    }
+
+    /*private void getReservation() throws SQLException {
+        try {
+            Connection myConnection = DriverManager.getConnection("jdbc:mysql://localhost:3306/hotel", "root", "password");
+            Statement myStatement = myConnection.createStatement();
+            ResultSet myResultStatement = myStatement.executeQuery("select * from hotel.`roomReservation`");
+        }
+        catch (SQLException e) {
+        System.out.println(e.getMessage());
+        }
+    }*/
+
+    public ArrayList<Reservation> getReservationsFromDB() {
+        ArrayList<Reservation> reservations = new ArrayList<>();
+        try {
+
+            Connection myConnection = DriverManager.getConnection("jdbc:mysql://localhost:3306/hotel", "root", "password");
+            Statement myStatement = myConnection.createStatement();
+            ResultSet myResultStatement = myStatement.executeQuery("select * from hotel.`reservation`");
 
 
-        Reservation reservation = new Reservation("1", 2,checkIn , checkOut,  g);
-        ArrayList <Reservation> defaultReservation = new ArrayList<>();
-        defaultReservation.add(reservation);
+            while (myResultStatement.next()) {
+                SimpleDateFormat sdf = new SimpleDateFormat("MM.dd.yyyy");
+                Date checkIn = (Date) sdf.parse(myResultStatement.getString("checkInDate"));
+                Date checkOut = (Date) sdf.parse(myResultStatement.getString("checkOutDate"));
+                String name = myResultStatement.getString("name");
+                String surname = myResultStatement.getString("surname");
+                String guestId = myResultStatement.getString("guestId");
+                reservations.add(new Reservation(myResultStatement.getString("id"), myResultStatement.getInt("numberOfGuests"),checkIn,checkOut,new Guest(guestId, name, surname)));
+            }
+        } catch (SQLException | ParseException e) {
+            System.out.println(e.getMessage());
+        }
+        //System.out.println(roomTypes.size());
+        return reservations;
+    }
 
-        r.add(reservation);
+    public ArrayList<Reservation> getRoomReservationsFromDB() {
+        ArrayList<Reservation> reservations = new ArrayList<>();
+        try {
 
-        h.addRoom(new Room(111, roomTypes.get(0), defaultReservation));
-        h.addRoom(new Room(112, roomTypes.get(0), defaultReservation));
-        h.addRoom(new Room(113, roomTypes.get(4), defaultReservation));
-        h.addRoom(new Room(114, roomTypes.get(4), defaultReservation));
-        h.addRoom(new Room(115, roomTypes.get(4), defaultReservation));
-        h.addRoom(new Room(119, roomTypes.get(2), defaultReservation));
-        h.addRoom(new Room(120, roomTypes.get(3), defaultReservation));
-        h.addRoom(new Room(116, roomTypes.get(0), defaultReservation));
-        h.addRoom(new Room(118, roomTypes.get(1), r));
+            Connection myConnection = DriverManager.getConnection("jdbc:mysql://localhost:3306/hotel", "root", "password");
+            Statement myStatement = myConnection.createStatement();
+            ResultSet myResultStatement = myStatement.executeQuery("select * from hotel.`reservation`");
 
 
+            while (myResultStatement.next()) {
+                SimpleDateFormat sdf = new SimpleDateFormat("MM.dd.yyyy");
+                Date checkIn = (Date) sdf.parse(myResultStatement.getString("checkInDate"));
+                Date checkOut = (Date) sdf.parse(myResultStatement.getString("checkOutDate"));
+                String name = myResultStatement.getString("name");
+                String surname = myResultStatement.getString("surname");
+                String guestId = myResultStatement.getString("guestId");
+                reservations.add(new Reservation(myResultStatement.getString("id"), myResultStatement.getInt("numberOfGuests"),checkIn,checkOut,new Guest(guestId, name, surname)));
+            }
+        } catch (SQLException | ParseException e) {
+            System.out.println(e.getMessage());
+        }
+        //System.out.println(roomTypes.size());
+        return reservations;
+    }
+
+
+
+    public RoomType getRoomTypesById(int id) {
+        System.out.println(id);
+        //System.out.println(id);
+        for (RoomType roomType : roomTypes) {
+            if (roomType.getId() == id) {
+                return roomType;
+            }
+        }
+        return null;
     }
 }

@@ -9,7 +9,7 @@ public class Room {
     ArrayList<Reservation> reservations;
 
     //constructor
-    Room(int number, RoomType type, ArrayList<Reservation> reservations) {
+    public Room(int number, RoomType type, ArrayList<Reservation> reservations) {
         this.number = number;
         this.type = type;
         this.reservations = reservations;
@@ -38,4 +38,6 @@ public class Room {
                 "\nType:" + type +
                 "\nReservations: " + reservations;
     }
+
+
 }

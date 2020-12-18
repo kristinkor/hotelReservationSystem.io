@@ -39,11 +39,11 @@ public class Reservation {
 
     @Override
     public String toString() {
-        return "Reservation: " +
-                "numberOfGuests " + numberOfGuests +
-                ", checkInDate " + checkInDate +
-                ", checkOutDate " + checkOutDate +
-                ", id " + id +
-                ", mainGuest " + mainGuest;
+        return "\nYour reservation: " +
+                "\nBooking id: " + id +
+                "\nNumberOfGuests: " + numberOfGuests +
+                "\nCheckInDate: " + checkInDate +
+                "\nCheckOutDate: " + checkOutDate +
+                "\nMainGuest: " + mainGuest;
     }
 }

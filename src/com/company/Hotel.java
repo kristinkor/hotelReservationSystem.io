@@ -1,5 +1,11 @@
 package com.company;
 
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
+import java.text.Format;
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.ArrayList;
@@ -12,7 +18,7 @@ public class Hotel {
     ArrayList<Room> rooms = new ArrayList<>();
 
 
-    Hotel(String name, String address, double rating) {
+    public Hotel(String name, String address, double rating) {
         this.name = name;
         this.address = address;
         this.rating = rating;
@@ -34,6 +40,10 @@ public class Hotel {
         rooms.add(room);
     }
 
+    public ArrayList<Room> getRoom(){
+        return rooms;
+    }
+
     public ArrayList<RoomType> getRoomTypes() {
         ArrayList<RoomType> rt = new ArrayList<>();
         for (Room room : rooms) {
@@ -46,11 +56,9 @@ public class Hotel {
 
     public Room foundAvailableRoom(RoomType roomType, Date requestCheckIn, Date requestCheckOut) {
         for (Room room : rooms) {
-
             if (room.getType().equals(roomType)) {
                 for (int j = 0; j < room.getReservations().size(); j++) {
                     Date roomCheckIn = room.reservations.get(j).getCheckInDate();
-
                     Date roomCheckOut = room.reservations.get(j).getCheckOutDate();
                     if ((requestCheckOut.before(roomCheckIn)) || requestCheckIn.after(roomCheckOut)) {
                         return room;
@@ -86,12 +94,38 @@ public class Hotel {
         return roomType.getDailyRate() * getDaysOfStay(reservationRequest.getCheckInDate(), reservationRequest.getCheckOutDate());
     }
 
-    public void addReservation(RoomType roomType, Reservation reservation) {
+    public void addReservation(RoomType roomType, Reservation reservation) throws SQLException {
         final Date reservationCheckIn = reservation.getCheckInDate();
         final Date reservationCheckOut = reservation.getCheckOutDate();
         Room room = (foundAvailableRoom(roomType, reservationCheckIn, reservationCheckOut));
         if (!(room == null)) {
             room.addReservation(roomType, reservation);
+            connectReservationToRoom(room.getNumber(),reservation.getId());
+
+        }
+    }
+
+    public void connectReservationToRoom (int number, String reservationId) throws SQLException {
+        Connection myConnection = DriverManager.getConnection("jdbc:mysql://localhost:3306/hotel", "root", "password");
+        try {
+
+            PreparedStatement pr = myConnection.prepareStatement("insert into "
+                    + "roomReservation(number, reservationId) values(?,?)");
+            pr.setInt(1, number);
+            pr.setString(2, reservationId);
+
+
+            pr.executeUpdate();
+        } catch (SQLException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+            try {
+                myConnection.close();
+            } catch (SQLException e1) {
+                // TODO Auto-generated catch block
+                e1.printStackTrace();
+            }
+
         }
     }
 

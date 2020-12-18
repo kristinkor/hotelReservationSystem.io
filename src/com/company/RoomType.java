@@ -10,7 +10,7 @@ public class RoomType {
     private int capacity;
     private ArrayList<String> facilities;
 
-    RoomType(int id, String name, double dailyRate, int capacity, ArrayList<String> facilities) {
+    public RoomType(int id, String name, double dailyRate, int capacity, ArrayList<String> facilities) {
         this.id = id;
         this.name = name;
         this.dailyRate = dailyRate;
@@ -22,16 +22,32 @@ public class RoomType {
         return id;
     }
 
+    public void setId(int id) {
+        this.id = id;
+    }
+
     public String getName() {
         return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 
     public double getDailyRate() {
         return dailyRate;
     }
 
+    public void setDailyRate(double dailyRate) {
+        this.dailyRate = dailyRate;
+    }
+
     public int getCapacity() {
         return capacity;
+    }
+
+    public void setCapacity(int capacity) {
+        this.capacity = capacity;
     }
 
     public ArrayList<String> getFacilities() {
