@@ -42,7 +42,6 @@ public class Hotel {
         return rooms;
     }
 
-
     public ArrayList<RoomType> getRoomTypes() {
         ArrayList<RoomType> rt = new ArrayList<>();
         for (Room room : rooms) {
@@ -53,7 +52,34 @@ public class Hotel {
         return rt;
     }
 
-    public Room foundAvailableRoom(RoomType roomType, Date requestCheckIn, Date requestCheckOut, ArrayList<RoomReservation> roomReservations, ArrayList<Reservation> reservations) {
+    /*public Room foundAvailableRoom(Date requestCheckIn, Date requestCheckOut, ArrayList<Room> arrayRoomsByType) throws SQLException {
+        Connection myConnection = DriverManager.getConnection("jdbc:mysql://localhost:3306/hotel", "root", "password");
+        try {
+            Reservation reservation = new Reservation(null, 0, null, null, null);
+            for (int i = 0; i < arrayRoomsByType.size(); i++) {
+                String query = "select reservationId from roomReservation where number = " + arrayRoomsByType.get(i);
+                PreparedStatement pr = myConnection.prepareStatement(query);
+                //reservation = sqlrequest(query);
+                Date roomCheckIn = reservation.getCheckInDate();
+                Date roomCheckOut = reservation.getCheckOutDate();
+
+
+                if ((requestCheckOut.before(roomCheckIn)) || requestCheckIn.after(roomCheckOut)) {
+                    System.out.println("jiii");
+                    return arrayRoomsByType.get(i);
+
+                    //****
+                }
+
+            }
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+        return null;
+    }
+*/
+    /*public Room foundAvailableRoom(RoomType roomType, Date requestCheckIn, Date requestCheckOut, ArrayList<RoomReservation> roomReservations, ArrayList<Reservation> reservations) {
+
         for (Room room : rooms) {
             if (room.getType().equals(roomType)) {
                 int j;
@@ -74,6 +100,12 @@ public class Hotel {
 
                                             //****
                                         }
+                                        else {
+                                            return null;
+                                        }
+                                    }
+                                    else {
+                                        return null;
                                     }
                                 }
                             }
@@ -84,14 +116,14 @@ public class Hotel {
             }
         }
         return null;
-    }
+    }*/
 
-    public boolean isReservationPossible(RoomType roomType, ReservationRequest reservationRequest, ArrayList<RoomReservation> roomReservations, ArrayList<Reservation> reservations) {
+/*    public boolean isReservationPossible( ReservationRequest reservationRequest, ArrayList<Room> roomsByType) throws SQLException {
         final Date requestCheckIn = reservationRequest.getCheckInDate();
         final Date requestCheckOut = reservationRequest.getCheckOutDate();
-        Room room = (foundAvailableRoom(roomType, requestCheckIn, requestCheckOut, roomReservations, reservations));
+        Room room = (foundAvailableRoom(requestCheckIn, requestCheckOut, roomsByType));
         return !(room == null);
-    }
+    }*/
 
     public int getDaysOfStay(Date checkIn, Date checkOut) {
         Calendar cal3 = Calendar.getInstance();
@@ -114,7 +146,7 @@ public class Hotel {
     public void addReservation(RoomType roomType, Reservation reservation, ArrayList<RoomReservation> roomReservations, ArrayList<Reservation> reservations) throws SQLException {
         final Date reservationCheckIn = reservation.getCheckInDate();
         final Date reservationCheckOut = reservation.getCheckOutDate();
-        Room room = (foundAvailableRoom(roomType, reservationCheckIn, reservationCheckOut, roomReservations, reservations));
+        Room room = (foundAvailableRoom(roomType, reservationCheckIn, reservationCheckOut));
         if (!(room == null)) {
             room.addReservation(roomType, reservation);
             connectReservationToRoom(room.getNumber(), reservation.getId());
@@ -126,9 +158,9 @@ public class Hotel {
         try {
 
             PreparedStatement pr = myConnection.prepareStatement("insert into "
-                    + "roomReservation(number, reservationId) values(?,?)");
-            pr.setInt(1, number);
-            pr.setString(2, reservationId);
+                    + "roomReservation(reservationId, number) values(?,?)");
+            pr.setString(1, reservationId);
+            pr.setInt(2, number);
 
 
             pr.executeUpdate();
@@ -143,6 +175,38 @@ public class Hotel {
             }
 
         }
+    }
+
+    public Room foundAvailableRoom(RoomType roomType, Date requestCheckIn, Date requestCheckOut) {
+        for (Room room : rooms) {
+            if (room.getType().equals(roomType)) {
+                if (room.getReservations().size() == 0) {
+                    return room;
+                }
+                else if (isRoomAvailable(room, requestCheckIn, requestCheckOut)) {
+                    return room;
+                }
+            }
+        }
+        return null;
+    }
+
+    private boolean isRoomAvailable(Room room, Date requestCheckIn, Date requestCheckOut) {
+        for (int j = 0; j < room.getReservations().size(); j++) {
+            Date roomCheckIn = room.reservations.get(j).getCheckInDate();
+            Date roomCheckOut = room.reservations.get(j).getCheckOutDate();
+            if (!((requestCheckOut.before(roomCheckIn)) || requestCheckIn.after(roomCheckOut))) {
+                    return false;
+            }
+        }
+        return true;
+    }
+
+    public boolean isReservationPossible(RoomType roomType, ReservationRequest reservationRequest) {
+        final Date requestCheckIn = reservationRequest.getCheckInDate();
+        final Date requestCheckOut = reservationRequest.getCheckOutDate();
+        Room room = (foundAvailableRoom(roomType, requestCheckIn, requestCheckOut));
+        return !(room == null);
     }
 
     @Override
