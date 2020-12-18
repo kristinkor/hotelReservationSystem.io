@@ -22,32 +22,16 @@ public class RoomType {
         return id;
     }
 
-    public void setId(int id) {
-        this.id = id;
-    }
-
     public String getName() {
         return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
     }
 
     public double getDailyRate() {
         return dailyRate;
     }
 
-    public void setDailyRate(double dailyRate) {
-        this.dailyRate = dailyRate;
-    }
-
     public int getCapacity() {
         return capacity;
-    }
-
-    public void setCapacity(int capacity) {
-        this.capacity = capacity;
     }
 
     public ArrayList<String> getFacilities() {

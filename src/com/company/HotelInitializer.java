@@ -47,7 +47,7 @@ public class HotelInitializer {
         try {
 
             PreparedStatement pr = myConnection.prepareStatement("insert into "
-                    + "reservation(id, numberOfGuests, checkInDate, checkOutDate, name, surname) values(?,?,?,?,?,?)");
+                    + "reservation(id, numberOfGuests, checkInDate, checkOutDate, guestId, name, surname) values(?,?,?,?,?,?,?)");
             pr.setString(1, reservation.getId());
 
             pr.setInt(2, reservation.getNumberOfGuests());
@@ -57,8 +57,9 @@ public class HotelInitializer {
             String checkOut = formatter.format(reservation.getCheckOutDate());
             pr.setString(3, checkIn);
             pr.setString(4, checkOut);
-            pr.setString(5, guest.getName());
-            pr.setString(6, guest.getSurname());
+            pr.setString(5, guest.getId());
+            pr.setString(6, guest.getName());
+            pr.setString(7, guest.getSurname());
             pr.executeUpdate();
         } catch (SQLException e) {
             // TODO Auto-generated catch block
@@ -148,8 +149,8 @@ public class HotelInitializer {
         return reservations;
     }
 
-    public ArrayList<Reservation> getRoomReservationsFromDB() {
-        ArrayList<Reservation> reservations = new ArrayList<>();
+    public ArrayList<RoomReservation> getRoomReservationsFromDB() {
+        ArrayList<RoomReservation> roomReservations = new ArrayList<>();
         try {
 
             Connection myConnection = DriverManager.getConnection("jdbc:mysql://localhost:3306/hotel", "root", "password");
@@ -158,19 +159,13 @@ public class HotelInitializer {
 
 
             while (myResultStatement.next()) {
-                SimpleDateFormat sdf = new SimpleDateFormat("MM.dd.yyyy");
-                Date checkIn = (Date) sdf.parse(myResultStatement.getString("checkInDate"));
-                Date checkOut = (Date) sdf.parse(myResultStatement.getString("checkOutDate"));
-                String name = myResultStatement.getString("name");
-                String surname = myResultStatement.getString("surname");
-                String guestId = myResultStatement.getString("guestId");
-                reservations.add(new Reservation(myResultStatement.getString("id"), myResultStatement.getInt("numberOfGuests"),checkIn,checkOut,new Guest(guestId, name, surname)));
+                roomReservations.add(new RoomReservation(myResultStatement.getString("reservationId"), myResultStatement.getInt("number")));
             }
-        } catch (SQLException | ParseException e) {
+        } catch (SQLException e) {
             System.out.println(e.getMessage());
         }
         //System.out.println(roomTypes.size());
-        return reservations;
+        return roomReservations;
     }
 
 

@@ -14,6 +14,8 @@ public class Main{
 
         ArrayList<RoomType> roomTypes = init.roomTypeInit();
         init.roomInit(roomTypes);
+        ArrayList<Reservation> reservationsFromDB = init.getReservationsFromDB();
+        ArrayList<RoomReservation> roomReservationsFromDB = init.getRoomReservationsFromDB();
 
         boolean condition = true;
         do {
@@ -23,11 +25,12 @@ public class Main{
             RoomType roomTypeRequest = (getRoomTypeById(roomTypes, roomTypeId));
             int numOfGuests = getNumOfGuests(roomTypeRequest);
 
+
             Date checkInDate = requestCheckInDate();
             Date checkOutDate = requestCheckOutDate(checkInDate);
 
             ReservationRequest reservationRequest = new ReservationRequest(checkInDate, checkOutDate, numOfGuests);
-            boolean isPossible = init.h.isReservationPossible(getRoomTypeById(roomTypes, roomTypeId), reservationRequest);
+            boolean isPossible = init.h.isReservationPossible(getRoomTypeById(roomTypes, roomTypeId), reservationRequest, roomReservationsFromDB, reservationsFromDB);
 
             if (isPossible) {
                 System.out.println(reservationRequest.toString());
@@ -39,14 +42,12 @@ public class Main{
                     //requestPayment(totalCost);
                     String id = generateId();
                     Reservation reservation = new Reservation(id, numOfGuests, checkInDate, checkOutDate, guest);
+                    init.h.addReservation(roomTypeRequest, reservation, roomReservationsFromDB, reservationsFromDB);
                     if(init.saveReservations(reservation, guest)==1) {
                         System.out.println("Success");
-                    }else  {
+                    } else  {
                         System.out.println("Shit happens");
                     }
-
-                    init.h.addReservation(roomTypeRequest, reservation);
-
                     System.out.println("Congratulations! Your booking is made. ");
                     System.out.println("Your reservation: \n" + reservation.toString());
                 }

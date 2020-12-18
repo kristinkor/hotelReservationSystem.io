@@ -8,6 +8,7 @@ public class Room {
     RoomType type;
     ArrayList<Reservation> reservations;
 
+
     //constructor
     public Room(int number, RoomType type, ArrayList<Reservation> reservations) {
         this.number = number;
@@ -30,6 +31,7 @@ public class Room {
     public void addReservation(RoomType type, Reservation reservation) {
         this.reservations.add(reservation);
     }
+
 
     @Override
     public String toString() {
