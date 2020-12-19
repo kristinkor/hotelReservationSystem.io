@@ -13,7 +13,6 @@ public class Payment {
         this.billingNameLast = billingNameLast;
         this.billingAddress = billingAddress;
         this.totalCost = totalCost;
-
     }
 
     public String getBillingNameFirst() {

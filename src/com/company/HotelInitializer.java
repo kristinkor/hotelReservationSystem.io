@@ -77,41 +77,6 @@ public class HotelInitializer {
         return 1;
     }
 
-/*    public ArrayList<Room> roomInit(ArrayList<RoomType> rt, int type) {
-        ArrayList<Room> rooms = new ArrayList<>();
-        try {
-
-            Connection myConnection = DriverManager.getConnection("jdbc:mysql://localhost:3306/hotel", "root", "password");
-            Statement myStatement = myConnection.createStatement();
-            //    ResultSet myResultStatement = myStatement.executeQuery("select * from hotel.`room`");
-            String query = "select * from hotel.`room` where roomTypeId = " + type;
-            ResultSet myResultStatement = myStatement.executeQuery(query);
-
-*//*            Date checkIn = new java.util.Date("Wed Dec 20 00:00:00 EST 2020");
-            Date checkOut = new java.util.Date("Wed Dec 25 00:00:00 EST 2020");
-            Guest g = new Guest("5", "a", "b");
-
-            Reservation reservation = new Reservation("1", 2, checkIn, checkOut, g);
-            ArrayList<Reservation> defaultReservation = new ArrayList<>();
-            defaultReservation.add(reservation);*//*
-
-            while (myResultStatement.next()) {
-                ArrayList<Reservation> defaultReservation = new ArrayList<>();
-                //defaultReservation.add(getReservation());
-                int id = myResultStatement.getInt("roomTypeId");
-                h.addRoom(new Room(myResultStatement.getInt("number"), getRoomTypesById(id), getRoomReservations(myResultStatement.getInt("number"))));
-                //rooms.add(new Room(myResultStatement.getInt("number"), getRoomTypesById(id), defaultReservation));
-
-                return rooms;
-            }
-            //System.out.println(h.getRoom().size());
-
-        } catch (SQLException e) {
-            System.out.println(e.getMessage());
-        }
-        return rooms;
-    }*/
-
     public ArrayList<Room> roomInitiate(ArrayList<RoomType> rt) {
 
         ArrayList<Room> rooms = new ArrayList<>();
@@ -126,19 +91,6 @@ public class HotelInitializer {
 
                 h.addRoom(new Room(myResultStatement.getInt("number"), getRoomTypesById(id), reservations));
             }
-            //System.out.println(h.getRoom().size());
-
-
-            // Test code
-/*            String query = "select * from hotel.`room` where roomTypeId = " + 1115;
-            ResultSet myResultStatement1 = myStatement.executeQuery(query);
-            ArrayList<Room> roomsByType = new ArrayList<>();
-            while (myResultStatement1.next()) {
-                ArrayList<Reservation> reservations = getRoomReservations(myResultStatement1.getInt("number"));
-                int id = myResultStatement1.getInt("roomTypeId");
-                roomsByType.add(new Room(myResultStatement1.getInt("number"), getRoomTypesById(id), reservations));
-            }
-*/
 
         } catch (SQLException e) {
             System.out.println(e.getMessage());
@@ -146,7 +98,7 @@ public class HotelInitializer {
         return rooms;
     }
 
-    private ArrayList<Reservation> getRoomReservations(int roomNumber) {
+    public ArrayList<Reservation> getRoomReservations(int roomNumber) {
         ArrayList<Reservation> res = new ArrayList<Reservation>();
         for (int i = 0; i < getRoomReservationsFromDB().size(); i++) {
             if (getRoomReservationsFromDB().get(i).getNumber() == roomNumber) {

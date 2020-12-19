@@ -20,7 +20,6 @@ public class Main {
             ArrayList<Reservation> reservationsFromDB = init.getReservationsFromDB();
             ArrayList<RoomReservation> roomReservationsFromDB = init.getRoomReservationsFromDB();
             JOptionPane.showMessageDialog(null, init.h.toString() + "\nWe have following types of rooms in the Hotel: \n" + init.h.getRoomTypes().toString());
-            //System.out.println(init.h.toString() + "\nWe have following types of rooms in the Hotel: \n" + init.h.getRoomTypes());
 
             int roomTypeId = requestRoomTypeId(roomTypes);
             RoomType roomTypeRequest = getRoomTypeById(roomTypes, roomTypeId);
@@ -37,8 +36,6 @@ public class Main {
                 System.out.println(reservationRequest.toString());
                 double totalCost = init.h.calculatePrice(roomTypeRequest, reservationRequest);
                 JOptionPane.showMessageDialog(null, "You can book this room! The price for your reservation request is " + totalCost + "$.");
-                //System.out.println("You can book this room! The price for your reservation request is " + totalCost + "$.");
-                //System.out.println("Would you like to make a reservation? Please press Y or N ");
                 int n = JOptionPane.showConfirmDialog(
                         null, "Would you like to make a reservation?",
                         "An Inane Question",
@@ -46,7 +43,7 @@ public class Main {
                 if (n == JOptionPane.YES_OPTION) {
                     Guest guest = requestGuestInformation();
 
-                    //requestPayment(totalCost);
+
                     String id = generateId();
                     Reservation reservation = new Reservation(id, numOfGuests, checkInDate, checkOutDate, guest);
                     init.h.addReservation(roomTypeRequest, reservation, roomReservationsFromDB, reservationsFromDB);
@@ -56,6 +53,7 @@ public class Main {
                         System.out.println("Huston we have a serious problem! ");
                     }
                     JOptionPane.showMessageDialog(null, "Congratulations! Your booking is made. \nYour reservation: \n" + reservation.toString());
+                    //requestPayment(totalCost);
                 } else if (n == JOptionPane.NO_OPTION) {
                     int x = JOptionPane.showConfirmDialog(
                             null, "Would you like to make another reservation? Please press Y or N ",
@@ -84,12 +82,6 @@ public class Main {
             if (x == JOptionPane.NO_OPTION) {
                 condition = false;
             }
-            //String txt = JOptionPane.showInputDialog("Would you like to make another reservation? Please press Y or N ");
-
-//            //System.out.println("Would you like to make another reservation? Please press Y or N ");
-//            if (!requestConfirmation(txt)) {
-//                condition = false;
-//            }
         }
         while (condition);
     }
@@ -99,16 +91,11 @@ public class Main {
         do {
             try {
                 String name = JOptionPane.showInputDialog("Please, Enter the name of the Guest who is making reservation ");
-                //System.out.println("Please, Enter the name of the Guest who is making reservation ");
-                //String name = scan.nextLine();
                 String surname = JOptionPane.showInputDialog("Please Enter the surname ");
-                //System.out.println("Please Enter the surname ");
-                //String surname = scan.nextLine();
                 String userId = generateId();
                 return new Guest(userId, name, surname);
             } catch (Exception e) {
                 JOptionPane.showMessageDialog(null, "Invalid input. Please try again.");
-                //System.out.println("Invalid input. Please try again.");
             }
 
         }
@@ -121,14 +108,12 @@ public class Main {
     }
 
     public static int requestRoomTypeId(ArrayList<RoomType> rt) {
-        Scanner scan = new Scanner(System.in);
         boolean flag = true;
         int roomTypeId = 0;
 
         do {
             try {
                 String txt = JOptionPane.showInputDialog("Chose the room type by entering id#: ");
-                //System.out.println("Chose the room type by entering id#: ");
                 roomTypeId = Integer.parseInt(txt);
                 for (RoomType roomType : rt) {
                     if (roomTypeId == roomType.getId()) {
@@ -138,8 +123,6 @@ public class Main {
                 }
             } catch (Exception e) {
                 String txt = JOptionPane.showInputDialog("Please, enter the correct room Type Id");
-                //System.out.println("Please, enter the correct room Type Id ");
-                //scan.next();
             }
         }
         while (flag);
@@ -155,18 +138,15 @@ public class Main {
                 SimpleDateFormat sdf = new SimpleDateFormat("MM.dd.yyyy");
                 Scanner scan = new Scanner(System.in);
                 String txt = JOptionPane.showInputDialog("Please enter the check-in date in format MM.dd.yyyy");
-                //System.out.println("Please enter the check-in date in format MM.dd.yyyy");
                 checkInDate = sdf.parse(txt);
 
                 if (isValidCheckIn(checkInDate)) {
                     JOptionPane.showMessageDialog(null, "The Check-in date is: " + checkInDate);
-                    //System.out.println("The Check-in date is: " + checkInDate);
                     flag = false;
                 }
 
             } catch (Exception ex) {
                 JOptionPane.showMessageDialog(null, "This check-in date is unavailable. Please, try again ");
-                //System.out.println("This check-in date is unavailable. Please, try again ");
             }
         }
         while (flag);
@@ -192,18 +172,15 @@ public class Main {
                 SimpleDateFormat sdf = new SimpleDateFormat("MM.dd.yyyy");
                 Scanner scan = new Scanner(System.in);
                 String txt = JOptionPane.showInputDialog("Please enter the check-out date in format MM.dd.yyyy ");
-                //System.out.println("Please enter the check-out date in format MM.dd.yyyy");
                 checkOutDate = sdf.parse(txt);
 
                 if (isValidCheckOut(checkInDate, checkOutDate)) {
                     JOptionPane.showMessageDialog(null, "The Check-out date is: " + checkOutDate);
-                    //System.out.println("The Check-out date is: " + checkOutDate);
                     continueInput = false;
                 }
 
             } catch (Exception ex) {
                 JOptionPane.showMessageDialog(null, "This check-in date is unavailable. Please, try again ");
-                //System.out.println("This check-in date is unavailable. Please, try again ");
             }
         }
         while (continueInput);
@@ -221,20 +198,16 @@ public class Main {
     public static int getNumOfGuests(RoomType roomType) {
         do {
             try {
-                //Scanner scan = new Scanner(System.in);
                 String txt = JOptionPane.showInputDialog("Please enter the number of guests");
-                //System.out.println("Please enter the number of guests");
                 int numOfGuests = Integer.parseInt(txt);
                 ;
                 if (numOfGuests <= roomType.getCapacity()) {
                     return numOfGuests;
                 } else {
                     JOptionPane.showMessageDialog(null, "The number of people you entered is incorrect. ");
-                    //System.out.println("The number of people you entered is incorrect. ");
                 }
             } catch (Exception e) {
                 JOptionPane.showMessageDialog(null, "Wrong input! ");
-                //System.out.println("Wrong input! ");
             }
         }
         while (true);
@@ -262,12 +235,6 @@ public class Main {
             System.out.println("Wrong input");
         }
         return null;
-    }
-
-    private static boolean requestConfirmation(String confirmtion) {
-        //Scanner scan = new Scanner(System.in);
-        //String userInput = scan.nextLine();
-        return confirmtion.compareToIgnoreCase("Y") == 0;
     }
 
     private static void requestPayment(double totalCost) {

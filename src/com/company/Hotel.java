@@ -38,10 +38,6 @@ public class Hotel {
         rooms.add(room);
     }
 
-    public ArrayList<Room> getRoom() {
-        return rooms;
-    }
-
     public ArrayList<RoomType> getRoomTypes() {
         ArrayList<RoomType> rt = new ArrayList<>();
         for (Room room : rooms) {
@@ -51,79 +47,6 @@ public class Hotel {
         }
         return rt;
     }
-
-    /*public Room foundAvailableRoom(Date requestCheckIn, Date requestCheckOut, ArrayList<Room> arrayRoomsByType) throws SQLException {
-        Connection myConnection = DriverManager.getConnection("jdbc:mysql://localhost:3306/hotel", "root", "password");
-        try {
-            Reservation reservation = new Reservation(null, 0, null, null, null);
-            for (int i = 0; i < arrayRoomsByType.size(); i++) {
-                String query = "select reservationId from roomReservation where number = " + arrayRoomsByType.get(i);
-                PreparedStatement pr = myConnection.prepareStatement(query);
-                //reservation = sqlrequest(query);
-                Date roomCheckIn = reservation.getCheckInDate();
-                Date roomCheckOut = reservation.getCheckOutDate();
-
-
-                if ((requestCheckOut.before(roomCheckIn)) || requestCheckIn.after(roomCheckOut)) {
-                    System.out.println("jiii");
-                    return arrayRoomsByType.get(i);
-
-                    //****
-                }
-
-            }
-        } catch (SQLException e) {
-            System.out.println(e.getMessage());
-        }
-        return null;
-    }
-*/
-    /*public Room foundAvailableRoom(RoomType roomType, Date requestCheckIn, Date requestCheckOut, ArrayList<RoomReservation> roomReservations, ArrayList<Reservation> reservations) {
-
-        for (Room room : rooms) {
-            if (room.getType().equals(roomType)) {
-                int j;
-               if (roomReservations.size() != 0 && reservations.size() != 0){
-
-                    for (j = 0; j < roomReservations.size(); j++) {
-                        if (room.getNumber() == roomReservations.get(j).getNumber()) {
-                                for (int i = 0; i < reservations.size(); i++) {
-                                    if (roomReservations.get(j).getId() == reservations.get(i).getId()) {
-                                        //****
-                                        System.out.println(room.getNumber());
-                                        Date roomCheckIn = reservations.get(i).getCheckInDate();
-                                        Date roomCheckOut = reservations.get(i).getCheckOutDate();
-                                        if ((requestCheckOut.before(roomCheckIn)) || requestCheckIn.after(roomCheckOut)) {
-                                            System.out.println(room.getNumber());
-                                            System.out.println("jiii");
-                                            return room;
-
-                                            //****
-                                        }
-                                        else {
-                                            return null;
-                                        }
-                                    }
-                                    else {
-                                        return null;
-                                    }
-                                }
-                            }
-                        }
-                    }
-                System.out.println("jiii");
-                return room;
-            }
-        }
-        return null;
-    }*/
-
-/*    public boolean isReservationPossible( ReservationRequest reservationRequest, ArrayList<Room> roomsByType) throws SQLException {
-        final Date requestCheckIn = reservationRequest.getCheckInDate();
-        final Date requestCheckOut = reservationRequest.getCheckOutDate();
-        Room room = (foundAvailableRoom(requestCheckIn, requestCheckOut, roomsByType));
-        return !(room == null);
-    }*/
 
     public int getDaysOfStay(Date checkIn, Date checkOut) {
         Calendar cal3 = Calendar.getInstance();
@@ -182,8 +105,7 @@ public class Hotel {
             if (room.getType().equals(roomType)) {
                 if (room.getReservations().size() == 0) {
                     return room;
-                }
-                else if (isRoomAvailable(room, requestCheckIn, requestCheckOut)) {
+                } else if (isRoomAvailable(room, requestCheckIn, requestCheckOut)) {
                     return room;
                 }
             }
@@ -191,12 +113,12 @@ public class Hotel {
         return null;
     }
 
-    private boolean isRoomAvailable(Room room, Date requestCheckIn, Date requestCheckOut) {
+    public boolean isRoomAvailable(Room room, Date requestCheckIn, Date requestCheckOut) {
         for (int j = 0; j < room.getReservations().size(); j++) {
             Date roomCheckIn = room.reservations.get(j).getCheckInDate();
             Date roomCheckOut = room.reservations.get(j).getCheckOutDate();
             if (!((requestCheckOut.before(roomCheckIn)) || requestCheckIn.after(roomCheckOut))) {
-                    return false;
+                return false;
             }
         }
         return true;

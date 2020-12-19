@@ -4,8 +4,8 @@ public class RoomReservation {
     private String id;
     private int number;
 
-    public RoomReservation(String id, int number){
-        this.id =id;
+    public RoomReservation(String id, int number) {
+        this.id = id;
         this.number = number;
     }
 
